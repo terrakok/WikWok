@@ -27,11 +27,14 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import com.github.terrakok.wikwok.data.popularLanguages
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -167,21 +170,57 @@ fun WikipediaScreen(
             }
         }
 
-        IconButton(
+        // Language selector bottom sheet
+        var isBottomSheetVisible by remember { mutableStateOf(false) }
+        val selectedLanguage by viewModel.selectedLanguage.collectAsStateWithLifecycle()
+
+        LanguageSelectorBottomSheet(
+            isVisible = isBottomSheetVisible,
+            selectedLanguage = selectedLanguage,
+            languages = popularLanguages,
+            onLanguageSelected = {
+                viewModel.changeLanguage(it)
+                isBottomSheetVisible = false
+            },
+            onDismiss = { isBottomSheetVisible = false }
+        )
+
+        Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(16.dp)
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-                .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                .size(40.dp),
-            onClick = { navController.navigate(LikedArticlesDestination) }
+                .windowInsetsPadding(WindowInsets.safeDrawing),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Icon(
-                modifier = Modifier,
-                imageVector = vectorResource(Res.drawable.ic_favorite_fill),
-                contentDescription = "Favorites",
-                tint = Color.White
-            )
+            // Language selector button
+            IconButton(
+                modifier = Modifier
+                    .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
+                    .size(40.dp),
+                onClick = { isBottomSheetVisible = true }
+            ) {
+                Text(
+                    text = selectedLanguage.code.uppercase(),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // Favorites button
+            IconButton(
+                modifier = Modifier
+                    .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
+                    .size(40.dp),
+                onClick = { navController.navigate(LikedArticlesDestination) }
+            ) {
+                Icon(
+                    modifier = Modifier,
+                    imageVector = vectorResource(Res.drawable.ic_favorite_fill),
+                    contentDescription = "Favorites",
+                    tint = Color.White
+                )
+            }
         }
+
     }
 }

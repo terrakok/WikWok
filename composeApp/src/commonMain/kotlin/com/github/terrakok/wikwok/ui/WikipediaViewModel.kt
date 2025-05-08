@@ -2,9 +2,11 @@ package com.github.terrakok.wikwok.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.terrakok.wikwok.data.Language
 import com.github.terrakok.wikwok.data.LikedArticlesStore
 import com.github.terrakok.wikwok.data.WikipediaArticle
 import com.github.terrakok.wikwok.data.WikipediaService
+import com.github.terrakok.wikwok.data.popularLanguages
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,8 +32,23 @@ class WikipediaViewModel(
         .map { list -> list.map { it.id }.toSet() }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptySet())
 
+    // Language selection state
+    private val _selectedLanguage = MutableStateFlow(popularLanguages.first())
+    val selectedLanguage: StateFlow<Language> = _selectedLanguage.asStateFlow()
+
     init {
         loadMoreArticles()
+    }
+
+    /**
+     * Changes the selected language and reloads articles
+     */
+    fun changeLanguage(language: Language) {
+        if (_selectedLanguage.value.code != language.code) {
+            _selectedLanguage.value = language
+            _uiState.value = WikipediaUiState() // Reset UI state
+            loadMoreArticles()
+        }
     }
 
     /**
@@ -44,7 +61,8 @@ class WikipediaViewModel(
 
         viewModelScope.launch {
             try {
-                val newArticles = wikipediaService.getRandomArticles(30)
+                val languageCode = _selectedLanguage.value.code
+                val newArticles = wikipediaService.getRandomArticles(30, languageCode)
                 _uiState.update { currentState ->
                     currentState.copy(
                         articles = currentState.articles + newArticles,

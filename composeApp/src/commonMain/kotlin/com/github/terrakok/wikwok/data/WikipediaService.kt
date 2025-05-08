@@ -25,12 +25,13 @@ class WikipediaService {
 
     /**
      * Fetches a batch of random Wikipedia articles
-     * @param count Number of articles to fetch (ignored, API always returns 20)
+     * @param count Number of articles to fetch
+     * @param languageCode Language code for the Wikipedia API (e.g., "en" for English)
      * @return List of Wikipedia articles
      */
-    suspend fun getRandomArticles(count: Int): List<WikipediaArticle> {
+    suspend fun getRandomArticles(count: Int, languageCode: String): List<WikipediaArticle> {
         try {
-            val responseText = client.get("https://en.wikipedia.org/w/api.php?" +
+            val responseText = client.get("https://${languageCode}.wikipedia.org/w/api.php?" +
                     "action=query" +
                     "&format=json" +
                     "&generator=random" +
@@ -45,7 +46,7 @@ class WikipediaService {
                     "&piprop=thumbnail" +
                     "&pithumbsize=800" +
                     "&origin=*" +
-                    "&variant=en"
+                    "&variant=${languageCode}"
             ).body<String>()
             val jsonElement = Json.parseToJsonElement(responseText)
 
