@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -50,15 +50,13 @@ import wikwok.composeapp.generated.resources.retry
 fun WikipediaScreen() {
     val viewModel = viewModel { WikipediaViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val listState = rememberLazyListState()
-
-    var currentItemIndex by remember { mutableStateOf(0) }
+    val pagerState = rememberPagerState { uiState.articles.size + 1 }
 
     // Check if we need to load more articles when user scrolls to the end
     val shouldLoadMore = remember {
         derivedStateOf {
-            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem != null && lastVisibleItem.index >= uiState.articles.size - 3
+            // Load more when we're 3 pages away from the end
+            pagerState.currentPage >= uiState.articles.size - 3
         }
     }
 
@@ -69,26 +67,12 @@ fun WikipediaScreen() {
         }
     }
 
-    // Manual snap behavior
-    var isScrollInProgress by remember { mutableStateOf(false) }
-
-    LaunchedEffect(listState.isScrollInProgress) {
-        isScrollInProgress = listState.isScrollInProgress
-        if (!isScrollInProgress && uiState.articles.isNotEmpty()) {
-            // When scrolling stops, snap to the nearest item
-            val firstVisibleItemIndex = listState.firstVisibleItemIndex
-            val firstVisibleItemScrollOffset = listState.firstVisibleItemScrollOffset
-            val viewportHeight = listState.layoutInfo.viewportSize.height
-
-            // If we're more than halfway through the item, snap to the next one
-            if (firstVisibleItemScrollOffset > viewportHeight / 2 && firstVisibleItemIndex < uiState.articles.size - 1) {
-                currentItemIndex = firstVisibleItemIndex + 1
-            } else {
-                currentItemIndex = firstVisibleItemIndex
-            }
-
-            // Animate to the target item
-            listState.animateScrollToItem(currentItemIndex)
+    // Update pager size when articles change
+    LaunchedEffect(uiState.articles.size) {
+        if (uiState.articles.isNotEmpty()) {
+            pagerState.animateScrollToPage(
+                pagerState.currentPage.coerceAtMost(uiState.articles.size - 1)
+            )
         }
     }
 
@@ -142,33 +126,25 @@ fun WikipediaScreen() {
 
             else -> {
 
-                // TikTok-like fullscreen pager using LazyColumn
-                LazyColumn(
-                    state = listState,
+                // TikTok-like fullscreen pager using VerticalPager
+                VerticalPager(
+                    state = pagerState,
                     modifier = Modifier.fillMaxSize()
-                ) {
-                    items(uiState.articles) { article ->
+                ) { pageIndex ->
+                    if (pageIndex < uiState.articles.size) {
                         WikipediaArticleItem(
-                            article = article,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight()
+                            article = uiState.articles[pageIndex],
+                            modifier = Modifier.fillMaxSize()
                         )
-                    }
-
-                    if (uiState.isLoading) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillParentMaxHeight(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
+                    } else if (uiState.isLoading) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(60.dp)
+                            )
                         }
                     }
                 }

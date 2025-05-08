@@ -27,11 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.ImageLoader
 import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
+import com.github.terrakok.wikwok.LocalImageLoader
 import com.github.terrakok.wikwok.data.WikipediaArticle
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
@@ -49,7 +49,7 @@ fun WikipediaArticleItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             clipToBounds = true,
-            imageLoader = ImageLoader(LocalPlatformContext.current),
+            imageLoader = LocalImageLoader.current,
             modifier = Modifier.fillMaxSize(),
         )
         // Main content
@@ -98,7 +98,9 @@ fun WikipediaArticleItem(
             Text(
                 text = article.extract,
                 color = Color.White.copy(alpha = 0.8f), // Slightly less opaque white
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                maxLines = 15,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(16.dp))
 
