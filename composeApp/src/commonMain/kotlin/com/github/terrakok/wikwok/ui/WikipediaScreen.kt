@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,6 +47,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.error_loading
+import wikwok.composeapp.generated.resources.ic_family_star
 import wikwok.composeapp.generated.resources.ic_favorite_fill
 import wikwok.composeapp.generated.resources.loading
 import wikwok.composeapp.generated.resources.retry
@@ -189,6 +191,22 @@ fun WikipediaScreen(
                 .windowInsetsPadding(WindowInsets.safeDrawing),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            val uriHandler = LocalUriHandler.current
+            // App page button
+            IconButton(
+                modifier = Modifier
+                    .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
+                    .size(36.dp),
+                onClick = { uriHandler.openUri("https://github.com/terrakok/Wikwok") }
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = vectorResource(Res.drawable.ic_family_star),
+                    contentDescription = "App page",
+                    tint = Color.White
+                )
+            }
+
             // Language selector button
             IconButton(
                 modifier = Modifier
@@ -211,7 +229,7 @@ fun WikipediaScreen(
                 onClick = { navController.navigate(LikedArticlesDestination) }
             ) {
                 Icon(
-                    modifier = Modifier,
+                    modifier = Modifier.size(24.dp),
                     imageVector = vectorResource(Res.drawable.ic_favorite_fill),
                     contentDescription = "Favorites",
                     tint = Color.White
