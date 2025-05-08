@@ -32,8 +32,9 @@ If you enjoy WikWok and want to support its development, consider buying me a co
 
 Download WikWok from your preferred app store:
 
-- [App Store](https://example.com)
-- [Google Play](https://example.com)
+- App Store: IN PROGRESS
+- Google Play: IN PROGRESS
+- [Desktop (Macos/Linux/Windows)](https://github.com/terrakok/WikWok/releases)
 - [Web App](https://terrakok.github.io/WikWok/)
 
 Or build it yourself from source!

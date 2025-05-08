@@ -39,4 +39,3 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./composeApp/build/compose/binaries/main-release/WikWok.${{ matrix.artifact_ext }}
           tag: ${{ github.ref }}
-          draft: true
