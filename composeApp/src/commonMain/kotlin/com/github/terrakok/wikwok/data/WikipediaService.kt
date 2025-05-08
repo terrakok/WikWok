@@ -1,17 +1,27 @@
 package com.github.terrakok.wikwok.data
 
+import com.github.terrakok.wikwok.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
+
+@Serializable
+data class WikipediaArticle(
+    val id: Int,
+    val title: String,
+    val url: String,
+    val extract: String,
+    val thumbnail: String?
+)
 
 /**
  * Service for fetching Wikipedia articles
  */
-class WikipediaService(
+class WikipediaService {
     private val client: HttpClient = HttpClient()
-) {
 
     /**
      * Fetches a batch of random Wikipedia articles
@@ -65,10 +75,10 @@ class WikipediaService(
                 )
             }
 
-            return articles
+            return articles.filter { it.thumbnail != null && it.extract.length > 15 }
         } catch (e: Exception) {
             // Log the error in a real app
-            println("Error fetching Wikipedia articles: ${e.message}")
+            Log.error(e) { "Error fetching Wikipedia articles" }
             throw e
         }
     }

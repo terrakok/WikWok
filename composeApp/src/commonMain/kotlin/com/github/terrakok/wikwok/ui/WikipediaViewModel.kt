@@ -34,7 +34,7 @@ class WikipediaViewModel(
 
         viewModelScope.launch {
             try {
-                val newArticles = wikipediaService.getRandomArticles(10)
+                val newArticles = wikipediaService.getRandomArticles(30)
                 _uiState.update { currentState ->
                     currentState.copy(
                         articles = currentState.articles + newArticles,
