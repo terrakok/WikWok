@@ -45,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.github.terrakok.wikwok.LikedArticlesDestination
 import com.github.terrakok.wikwok.likedArticlesStore
+import com.github.terrakok.wikwok.settings
 import com.github.terrakok.wikwok.wikipediaService
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -62,7 +63,7 @@ import wikwok.composeapp.generated.resources.retry
 fun WikipediaScreen(
     navController: NavController
 ) {
-    val viewModel = viewModel { WikipediaViewModel(wikipediaService, likedArticlesStore) }
+    val viewModel = viewModel { WikipediaViewModel(wikipediaService, likedArticlesStore, settings) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val likedArticles by viewModel.likedArticles.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState { uiState.articles.size + 1 }
@@ -88,6 +89,8 @@ fun WikipediaScreen(
             pagerState.animateScrollToPage(
                 pagerState.currentPage.coerceAtMost(uiState.articles.size - 1)
             )
+        } else {
+            pagerState.scrollToPage(0)
         }
     }
 
@@ -196,7 +199,7 @@ fun WikipediaScreen(
             IconButton(
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                    .size(40.dp),
+                    .size(30.dp),
                 onClick = { isBottomSheetVisible = true }
             ) {
                 Text(
@@ -210,7 +213,7 @@ fun WikipediaScreen(
             IconButton(
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                    .size(40.dp),
+                    .size(30.dp),
                 onClick = { navController.navigate(LikedArticlesDestination) }
             ) {
                 Icon(

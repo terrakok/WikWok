@@ -1,8 +1,11 @@
 package com.github.terrakok.wikwok.data
 
+import kotlinx.serialization.Serializable
+
 /**
  * Data class representing a language with its name and locale code
  */
+@Serializable
 data class Language(
     val name: String,
     val code: String

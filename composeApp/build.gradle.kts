@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.kstore)
             implementation(libs.materialKolor)
             implementation(libs.filekit.core)
+            implementation(libs.multiplatform.settings)
         }
 
         commonTest.dependencies {

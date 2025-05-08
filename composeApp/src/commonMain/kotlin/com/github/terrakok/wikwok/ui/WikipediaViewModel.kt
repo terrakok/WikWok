@@ -7,6 +7,7 @@ import com.github.terrakok.wikwok.data.LikedArticlesStore
 import com.github.terrakok.wikwok.data.WikipediaArticle
 import com.github.terrakok.wikwok.data.WikipediaService
 import com.github.terrakok.wikwok.data.popularLanguages
+import com.russhwolf.settings.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,13 +16,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 /**
  * ViewModel for handling Wikipedia articles pagination
  */
 class WikipediaViewModel(
     private val wikipediaService: WikipediaService,
-    private val likedArticlesStore: LikedArticlesStore
+    private val likedArticlesStore: LikedArticlesStore,
+    private val settings: Settings
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WikipediaUiState())
@@ -33,8 +36,21 @@ class WikipediaViewModel(
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptySet())
 
     // Language selection state
-    private val _selectedLanguage = MutableStateFlow(popularLanguages.first())
+    private val _selectedLanguage = MutableStateFlow(savedSelectedLanguage)
     val selectedLanguage: StateFlow<Language> = _selectedLanguage.asStateFlow()
+
+    private var savedSelectedLanguage: Language
+        get() {
+            return settings.getStringOrNull("selected_language")?.let { str ->
+                Json.decodeFromString<Language>(str)
+            } ?: popularLanguages.first()
+        }
+        set(value) {
+            _selectedLanguage.value = value
+            val str = Json.encodeToString(value)
+            settings.putString("selected_language", str)
+        }
+
 
     init {
         loadMoreArticles()
@@ -44,8 +60,8 @@ class WikipediaViewModel(
      * Changes the selected language and reloads articles
      */
     fun changeLanguage(language: Language) {
-        if (_selectedLanguage.value.code != language.code) {
-            _selectedLanguage.value = language
+        if (savedSelectedLanguage.code != language.code) {
+            savedSelectedLanguage = language
             _uiState.value = WikipediaUiState() // Reset UI state
             loadMoreArticles()
         }

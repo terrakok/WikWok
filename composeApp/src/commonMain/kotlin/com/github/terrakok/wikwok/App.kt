@@ -41,6 +41,7 @@ import com.github.terrakok.wikwok.data.WikipediaService
 import com.github.terrakok.wikwok.theme.AppTheme
 import com.github.terrakok.wikwok.ui.LikedArticlesScreen
 import com.github.terrakok.wikwok.ui.WikipediaScreen
+import com.russhwolf.settings.Settings
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.xxfast.kstore.KStore
 import kotlinx.serialization.Serializable
@@ -55,6 +56,7 @@ internal val Log = KotlinLogging.logger("WikWok")
 internal val LocalImageLoader = compositionLocalOf<ImageLoader> { error("ImageLoader not provided") }
 internal val wikipediaService = WikipediaService()
 internal val likedArticlesStore = LikedArticlesStore(createStore("liked_articles_store"))
+internal val settings = Settings()
 
 internal expect fun createStore(name: String): KStore<LikedArticles>
 
