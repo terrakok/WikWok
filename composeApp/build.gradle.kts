@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.hotReload)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -56,10 +55,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.composee)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinInject)
             implementation(libs.coil)
             implementation(libs.coil.network.ktor)
-            implementation(libs.kotlinx.datetime)
             implementation(libs.kstore)
             implementation(libs.materialKolor)
         }
@@ -142,15 +139,4 @@ composeCompiler {
 }
 tasks.withType<ComposeHotRun>().configureEach {
     mainClass.set("MainKt")
-}
-
-dependencies {
-    with(libs.kotlinInjectKsp) {
-        add("kspAndroid", this)
-        add("kspJvm", this)
-        add("kspWasmJs", this)
-        add("kspIosX64", this)
-        add("kspIosArm64", this)
-        add("kspIosSimulatorArm64", this)
-    }
 }

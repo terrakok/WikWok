@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.stringResource
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.app_name
@@ -50,6 +52,7 @@ import wikwok.composeapp.generated.resources.retry
 fun WikipediaScreen() {
     val viewModel = viewModel { WikipediaViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val likedArticles by viewModel.likedArticles.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState { uiState.articles.size + 1 }
 
     // Check if we need to load more articles when user scrolls to the end
@@ -132,9 +135,13 @@ fun WikipediaScreen() {
                     modifier = Modifier.fillMaxSize()
                 ) { pageIndex ->
                     if (pageIndex < uiState.articles.size) {
+                        val article = uiState.articles[pageIndex]
+                        val isLiked = likedArticles[article.id] ?: false
                         WikipediaArticleItem(
-                            article = uiState.articles[pageIndex],
-                            modifier = Modifier.fillMaxSize()
+                            article = article,
+                            modifier = Modifier.fillMaxSize(),
+                            isLiked = isLiked,
+                            onLikeClick = { viewModel.toggleLike(article) }
                         )
                     } else if (uiState.isLoading) {
                         Box(

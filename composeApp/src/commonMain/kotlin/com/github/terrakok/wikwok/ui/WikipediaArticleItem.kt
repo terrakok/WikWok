@@ -36,12 +36,15 @@ import com.github.terrakok.wikwok.data.WikipediaArticle
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.ic_favorite
+import wikwok.composeapp.generated.resources.ic_favorite_fill
 import wikwok.composeapp.generated.resources.ic_share
 
 @Composable
 fun WikipediaArticleItem(
     article: WikipediaArticle,
-    modifier: Modifier = Modifier
+    isLiked: Boolean,
+    onLikeClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         AsyncImage(
@@ -76,12 +79,14 @@ fun WikipediaArticleItem(
                     modifier = Modifier.weight(1f)
                 )
                 Row {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onLikeClick) {
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            imageVector = vectorResource(Res.drawable.ic_favorite),
-                            contentDescription = "Like",
-                            tint = Color.White
+                            imageVector =
+                                if (isLiked) vectorResource(Res.drawable.ic_favorite_fill)
+                                else vectorResource(Res.drawable.ic_favorite),
+                            contentDescription = if (isLiked) "Unlike" else "Like",
+                            tint = if (isLiked) Color.Red else Color.White
                         )
                     }
                     IconButton(onClick = {}) {
