@@ -34,6 +34,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: composeApp/build/compose/binaries/main-release/${{ matrix.artifact_ext }}/WikWok-*.${{ matrix.artifact_ext }}
+          file: ./composeApp/build/compose/binaries/main-release/${{ matrix.artifact_ext }}/WikWok-*.${{ matrix.artifact_ext }}
           tag: ${{ github.ref }}
           draft: true
