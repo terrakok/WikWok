@@ -4,4 +4,6 @@
     <string name="error_loading">Error loading articles</string>
     <string name="retry">Retry</string>
     <string name="read_more">Open article</string>
+    <string name="no_liked_articles">No liked articles yet</string>
+    <string name="liked_articles">Liked Articles</string>
 </resources>

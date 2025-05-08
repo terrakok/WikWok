@@ -1,26 +1,12 @@
 package com.github.terrakok.wikwok
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import com.github.terrakok.wikwok.data.LikedArticles
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.filesDir
-import io.github.vinceglb.filekit.manualFileKitCoreInitialization
 import io.github.vinceglb.filekit.path
 import io.github.vinceglb.filekit.resolve
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
-
-class AppActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        FileKit.manualFileKitCoreInitialization(this)
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent { App() }
-    }
-}
 
 actual fun createStore(name: String): KStore<LikedArticles> {
     return storeOf(

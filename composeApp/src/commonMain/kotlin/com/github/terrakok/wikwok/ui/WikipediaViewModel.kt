@@ -6,8 +6,11 @@ import com.github.terrakok.wikwok.data.LikedArticlesStore
 import com.github.terrakok.wikwok.data.WikipediaArticle
 import com.github.terrakok.wikwok.data.WikipediaService
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -15,26 +18,20 @@ import kotlinx.coroutines.launch
  * ViewModel for handling Wikipedia articles pagination
  */
 class WikipediaViewModel(
-    private val wikipediaService: WikipediaService = WikipediaService(),
-    private val likedArticlesStore: LikedArticlesStore = LikedArticlesStore()
+    private val wikipediaService: WikipediaService,
+    private val likedArticlesStore: LikedArticlesStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WikipediaUiState())
     val uiState: StateFlow<WikipediaUiState> = _uiState.asStateFlow()
 
     // Map of article IDs to their liked status
-    private val _likedArticles = MutableStateFlow<Map<Int, Boolean>>(emptyMap())
-    val likedArticles: StateFlow<Map<Int, Boolean>> = _likedArticles.asStateFlow()
+    val likedArticles: StateFlow<Set<Int>> = likedArticlesStore.likedArticles
+        .map { list -> list.map { it.id }.toSet() }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptySet())
 
     init {
         loadMoreArticles()
-        // Load initial liked status
-        viewModelScope.launch {
-            likedArticlesStore.likedArticles.collect { likedArticlesList ->
-                val likedMap = likedArticlesList.associate { it.id to true }
-                _likedArticles.value = likedMap
-            }
-        }
     }
 
     /**
@@ -66,17 +63,7 @@ class WikipediaViewModel(
      */
     fun toggleLike(article: WikipediaArticle) {
         viewModelScope.launch {
-            val isLiked = likedArticlesStore.toggleLike(article)
-            // Update the local liked status immediately for UI responsiveness
-            _likedArticles.update { currentMap ->
-                val newMap = currentMap.toMutableMap()
-                if (isLiked) {
-                    newMap[article.id] = true
-                } else {
-                    newMap.remove(article.id)
-                }
-                newMap
-            }
+            likedArticlesStore.toggleLike(article)
         }
     }
 }
