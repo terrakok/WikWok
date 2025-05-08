@@ -21,10 +21,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.github.terrakok.wikwok.LocalImageLoader
+import com.github.terrakok.wikwok.LocalShareService
+import com.github.terrakok.wikwok.clipEntryOf
 import com.github.terrakok.wikwok.data.WikipediaArticle
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.ic_arrow_right
@@ -90,7 +96,17 @@ fun WikipediaArticleItem(
                             tint = if (isLiked) Color.Red else Color.White
                         )
                     }
-                    IconButton(onClick = {}) {
+                    val shareService = LocalShareService.current
+                    val clipboard = LocalClipboard.current
+                    val coroutineScope = rememberCoroutineScope()
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                shareService?.share(article.url)
+                                    ?: clipboard.setClipEntry(clipEntryOf(article.url))
+                            }
+                        }
+                    ) {
                         Icon(
                             modifier = Modifier.size(24.dp),
                             imageVector = vectorResource(Res.drawable.ic_share),

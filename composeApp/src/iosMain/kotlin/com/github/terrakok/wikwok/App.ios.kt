@@ -1,5 +1,7 @@
 package com.github.terrakok.wikwok
 
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.ClipEntry
 import com.github.terrakok.wikwok.data.LikedArticles
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.filesDir
@@ -13,3 +15,6 @@ actual fun createStore(name: String): KStore<LikedArticles> {
         kotlinx.io.files.Path(FileKit.filesDir.resolve("$name.json").path)
     )
 }
+
+@OptIn(ExperimentalComposeUiApi::class)
+actual fun clipEntryOf(text: String): ClipEntry = ClipEntry.withPlainText(text)

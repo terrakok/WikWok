@@ -26,6 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +39,7 @@ import coil3.ImageLoader
 import coil3.compose.LocalPlatformContext
 import com.github.terrakok.wikwok.data.LikedArticles
 import com.github.terrakok.wikwok.data.LikedArticlesStore
+import com.github.terrakok.wikwok.data.ShareService
 import com.github.terrakok.wikwok.data.WikipediaService
 import com.github.terrakok.wikwok.theme.AppTheme
 import com.github.terrakok.wikwok.ui.LikedArticlesScreen
@@ -55,21 +58,24 @@ import wikwok.composeapp.generated.resources.ic_arrow_back
 
 internal val Log = KotlinLogging.logger("WikWok")
 internal val LocalImageLoader = compositionLocalOf<ImageLoader> { error("ImageLoader not provided") }
+internal val LocalShareService = compositionLocalOf<ShareService?> { error("ShareService not provided") }
 internal val wikipediaService = WikipediaService()
 internal val likedArticlesStore = LikedArticlesStore(createStore("liked_articles_store"))
 internal val settings = Settings()
 
 internal expect fun createStore(name: String): KStore<LikedArticles>
+internal expect fun clipEntryOf(text: String): ClipEntry
 
-@Preview
 @Composable
 internal fun App(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    shareService: ShareService? = null
 ) = AppTheme {
     val context = LocalPlatformContext.current
     val imageLoader = remember(context) { ImageLoader(context) }
     CompositionLocalProvider(
         LocalImageLoader provides imageLoader,
+        LocalShareService provides shareService,
     ) {
         NavHost(
             navController = navController,
