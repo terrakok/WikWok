@@ -1,25 +1,25 @@
 package com.github.terrakok.wikwok.ui
 
-import androidx.compose.animation.core.copy
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,12 +33,9 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import com.github.terrakok.wikwok.data.WikipediaArticle
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.ic_favorite
-import wikwok.composeapp.generated.resources.ic_favorite_fill
-import wikwok.composeapp.generated.resources.ic_light_mode
 import wikwok.composeapp.generated.resources.ic_share
 
 @Composable
@@ -61,6 +58,9 @@ fun WikipediaArticleItem(
                 .fillMaxWidth()
                 .align(Alignment.BottomStart)
                 .background(Color.Black.copy(alpha = 0.7f))
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+                )
                 .padding(16.dp)
         ) {
             Row(
@@ -101,9 +101,11 @@ fun WikipediaArticleItem(
                 fontSize = 14.sp
             )
             Spacer(modifier = Modifier.height(16.dp))
+
+            val uriHandler = LocalUriHandler.current
             OutlinedButton(
                 modifier = Modifier.align(Alignment.End),
-                onClick = {}
+                onClick = { uriHandler.openUri(article.url) }
             ) {
                 Text(
                     text = "Read more \u2192", // Unicode right arrow
