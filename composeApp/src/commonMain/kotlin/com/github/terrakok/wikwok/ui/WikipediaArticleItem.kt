@@ -35,6 +35,7 @@ import com.github.terrakok.wikwok.LocalImageLoader
 import com.github.terrakok.wikwok.data.WikipediaArticle
 import org.jetbrains.compose.resources.vectorResource
 import wikwok.composeapp.generated.resources.Res
+import wikwok.composeapp.generated.resources.ic_arrow_right
 import wikwok.composeapp.generated.resources.ic_favorite
 import wikwok.composeapp.generated.resources.ic_favorite_fill
 import wikwok.composeapp.generated.resources.ic_share
@@ -114,11 +115,21 @@ fun WikipediaArticleItem(
                 modifier = Modifier.align(Alignment.End),
                 onClick = { uriHandler.openUri(article.url) }
             ) {
-                Text(
-                    text = "Read more \u2192", // Unicode right arrow
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Read more", // Unicode right arrow
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Icon(
+                        imageVector = vectorResource(Res.drawable.ic_arrow_right),
+                        contentDescription = "Read more",
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp).padding(start = 4.dp, top = 2.dp),
+                    )
+                }
             }
         }
     }

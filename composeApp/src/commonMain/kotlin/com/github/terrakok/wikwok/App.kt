@@ -44,6 +44,7 @@ import com.github.terrakok.wikwok.ui.WikipediaScreen
 import com.russhwolf.settings.Settings
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.xxfast.kstore.KStore
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -119,7 +120,9 @@ internal fun App(
 
 
 @Serializable
+@SerialName("main")
 internal data object MainDestination
 
 @Serializable
+@SerialName("liked_articles")
 internal data object LikedArticlesDestination
