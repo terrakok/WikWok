@@ -1,5 +1,6 @@
 package com.github.terrakok.wikwok.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,31 +49,31 @@ fun LikedArticlesScreen(
         }
     }
 
-    if (likedArticles.isEmpty()) {
-        // Show a message when there are no liked articles
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+    Box(
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
+        contentAlignment = Alignment.Center
+    ) {
+        if (likedArticles.isEmpty()) {
+            // Show a message when there are no liked articles
             Text(
                 text = "No liked articles yet",
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
-        }
-    } else {
-        // TikTok-like fullscreen pager using VerticalPager
-        VerticalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize()
-        ) { pageIndex ->
-            val article = likedArticles[pageIndex]
-            WikipediaArticleItem(
-                article = article,
-                modifier = Modifier.fillMaxSize(),
-                isLiked = true,
-                onLikeClick = { viewModel.toggleLike(article) }
-            )
+        } else {
+            // TikTok-like fullscreen pager using VerticalPager
+            VerticalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { pageIndex ->
+                val article = likedArticles[pageIndex]
+                WikipediaArticleItem(
+                    article = article,
+                    modifier = Modifier.fillMaxSize(),
+                    isLiked = true,
+                    onLikeClick = { viewModel.toggleLike(article) }
+                )
+            }
         }
     }
 }
