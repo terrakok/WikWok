@@ -17,17 +17,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,18 +52,21 @@ import com.github.terrakok.wikwok.ui.WikipediaScreen
 import com.russhwolf.settings.Settings
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.xxfast.kstore.KStore
+import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.app_name
 import wikwok.composeapp.generated.resources.ic_arrow_back
+import wikwok.composeapp.generated.resources.text_copied
 
 internal val Log = KotlinLogging.logger("WikWok")
 internal val LocalImageLoader = compositionLocalOf<ImageLoader> { error("ImageLoader not provided") }
-internal val LocalShareService = compositionLocalOf<ShareService?> { error("ShareService not provided") }
+internal val LocalShareService = compositionLocalOf<ShareService> { error("ShareService not provided") }
 internal val wikipediaService = WikipediaService()
 internal val likedArticlesStore = LikedArticlesStore(createStore("liked_articles_store"))
 internal val settings = Settings()
@@ -73,53 +81,69 @@ internal fun App(
 ) = AppTheme {
     val context = LocalPlatformContext.current
     val imageLoader = remember(context) { ImageLoader(context) }
+    val coroutineScope = rememberCoroutineScope()
+    val clipboard = LocalClipboard.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val share = shareService ?: object : ShareService {
+        override fun share(text: String) {
+            coroutineScope.launch {
+                clipboard.setClipEntry(clipEntryOf(text))
+                snackbarHostState.showSnackbar(getString(Res.string.text_copied))
+            }
+        }
+    }
+
     CompositionLocalProvider(
         LocalImageLoader provides imageLoader,
-        LocalShareService provides shareService,
+        LocalShareService provides share,
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = MainDestination,
+        Scaffold(
             modifier = Modifier.fillMaxSize(),
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) {
-            composable<MainDestination> { WikipediaScreen(navController) }
-            composable<LikedArticlesDestination> { LikedArticlesScreen(navController) }
-        }
-
-        val bs = navController.currentBackStack.collectAsStateWithLifecycle()
-        val isBackVisible = bs.value.size > 2
-
-
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
-                )
-                .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AnimatedVisibility(isBackVisible) {
-                IconButton(
-                    modifier = Modifier.size(24.dp),
-                    onClick = { navController.popBackStack() }
-                ) {
-                    Icon(
-                        imageVector = vectorResource(Res.drawable.ic_arrow_back),
-                        contentDescription = "Back",
-                        tint = Color.White
-                    )
-                }
+            NavHost(
+                navController = navController,
+                startDestination = MainDestination,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                composable<MainDestination> { WikipediaScreen(navController) }
+                composable<LikedArticlesDestination> { LikedArticlesScreen(navController) }
             }
-            Text(
-                text = stringResource(Res.string.app_name),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = 8.dp),
-            )
+
+            val bs = navController.currentBackStack.collectAsStateWithLifecycle()
+            val isBackVisible = bs.value.size > 2
+
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+                    )
+                    .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AnimatedVisibility(isBackVisible) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { navController.popBackStack() }
+                    ) {
+                        Icon(
+                            imageVector = vectorResource(Res.drawable.ic_arrow_back),
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                }
+                Text(
+                    text = stringResource(Res.string.app_name),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = Color.White,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                )
+            }
         }
     }
 }

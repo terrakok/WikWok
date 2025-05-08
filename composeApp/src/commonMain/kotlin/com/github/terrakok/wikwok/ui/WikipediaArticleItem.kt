@@ -97,15 +97,8 @@ fun WikipediaArticleItem(
                         )
                     }
                     val shareService = LocalShareService.current
-                    val clipboard = LocalClipboard.current
-                    val coroutineScope = rememberCoroutineScope()
                     IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                shareService?.share(article.url)
-                                    ?: clipboard.setClipEntry(clipEntryOf(article.url))
-                            }
-                        }
+                        onClick = { shareService.share(article.url) }
                     ) {
                         Icon(
                             modifier = Modifier.size(24.dp),

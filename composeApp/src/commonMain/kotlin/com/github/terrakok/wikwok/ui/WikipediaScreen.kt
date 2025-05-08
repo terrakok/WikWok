@@ -193,7 +193,7 @@ fun WikipediaScreen(
             IconButton(
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                    .size(34.dp),
+                    .size(36.dp),
                 onClick = { isBottomSheetVisible = true }
             ) {
                 Text(
@@ -207,7 +207,7 @@ fun WikipediaScreen(
             IconButton(
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(50))
-                    .size(34.dp),
+                    .size(36.dp),
                 onClick = { navController.navigate(LikedArticlesDestination) }
             ) {
                 Icon(

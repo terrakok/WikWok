@@ -7,4 +7,5 @@
     <string name="no_liked_articles">No liked articles yet</string>
     <string name="liked_articles">Liked Articles</string>
     <string name="select_language">Select Language</string>
+    <string name="text_copied">Text copied to clipboard</string>
 </resources>
