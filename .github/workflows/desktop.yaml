@@ -9,7 +9,13 @@ jobs:
   distributable:
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        include:
+          - os: ubuntu-latest
+            artifact_ext: deb
+          - os: windows-latest
+            artifact_ext: msi
+          - os: macos-latest
+            artifact_ext: dmg
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -28,5 +34,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: composeApp/build/compose/binaries/main-release
+          file: composeApp/build/compose/binaries/main-release/${{ matrix.artifact_ext }}/WikWok-*.${{ matrix.artifact_ext }}
           tag: ${{ github.ref }}
+          draft: true
