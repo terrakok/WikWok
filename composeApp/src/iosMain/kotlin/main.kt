@@ -1,3 +1,4 @@
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeUIViewController
 import com.github.terrakok.wikwok.App
 import com.github.terrakok.wikwok.Log
@@ -11,7 +12,7 @@ import platform.UIKit.UIUserInterfaceIdiomPad
 import platform.UIKit.UIViewController
 import platform.UIKit.popoverPresentationController
 
-@OptIn(ExperimentalForeignApi::class)
+@OptIn(ExperimentalForeignApi::class, ExperimentalComposeUiApi::class)
 fun MainViewController(): UIViewController {
     var viewController: UIViewController? = null
 
@@ -35,7 +36,11 @@ fun MainViewController(): UIViewController {
 
     }
 
-    viewController = ComposeUIViewController {
+    viewController = ComposeUIViewController(
+        configure = {
+            parallelRendering = true
+        }
+    ) {
         App(shareService = shareService)
     }
 

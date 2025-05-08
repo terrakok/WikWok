@@ -1,9 +1,6 @@
 package com.github.terrakok.wikwok
 
 import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.Clipboard
-import androidx.compose.ui.platform.asAwtTransferable
-import androidx.compose.ui.platform.awtClipboard
 import com.github.terrakok.wikwok.data.LikedArticles
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.filesDir
