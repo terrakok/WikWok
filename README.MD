@@ -34,7 +34,7 @@ Download WikWok from your preferred app store:
 
 - [App Store](https://example.com)
 - [Google Play](https://example.com)
-- [Web App](https://example.com)
+- [Web App](https://terrakok.github.io/WikWok/)
 
 Or build it yourself from source!
 

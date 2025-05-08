@@ -1,0 +1,32 @@
+name: Build desktop apps
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  distributable:
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build
+        run: ./gradlew packageReleaseDistributionForCurrentOS
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: composeApp/build/compose/binaries/main-release/*
+          tag: ${{ github.ref }}
