@@ -28,5 +28,5 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: composeApp/build/compose/binaries/main-release/*
+          file: composeApp/build/compose/binaries/main-release
           tag: ${{ github.ref }}
