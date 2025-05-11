@@ -1,0 +1,12 @@
+WikWok transforms your Wikipedia reading experience into an engaging, scroll-based article feed. Learn something new with every swipe!
+
+Key Features
+- Beautiful Interface: Clean, modern design focused on readability
+- Intuitive Scrolling Feed: Discover Wikipedia articles in an engaging format
+- Cross-Platform: Available on multiple platforms including Android, iOS, desktop and web
+- Completely Free: No subscriptions, no ads, just knowledge
+- Open Source: Community-driven development welcomes contributions
+
+Enjoy a fresh way to discover knowledge! Simply scroll through beautifully formatted Wikipedia articles and expand your horizons one swipe at a time.
+WikWok is and will always remain completely free with no advertisements.
+If you enjoy the app, consider supporting the developer with a coffee through the link in the app!
