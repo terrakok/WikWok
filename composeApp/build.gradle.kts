@@ -170,10 +170,6 @@ compose.desktop {
     }
 }
 
-//https://github.com/JetBrains/compose-hot-reload
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
-}
 tasks.withType<ComposeHotRun>().configureEach {
     mainClass.set("MainKt")
 }
