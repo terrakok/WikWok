@@ -110,6 +110,31 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        if (properties.contains("key.file")) {
+            create("release") {
+                storeFile = file(properties["key.file"] as String)
+                storePassword = properties["key.pwd"] as String
+                keyAlias = properties["key.alias"] as String
+                keyPassword = properties["key.alias.pwd"] as String
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+            if (properties.contains("key.file")) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
+    }
 }
 
 //https://developer.android.com/develop/ui/compose/testing#setup
