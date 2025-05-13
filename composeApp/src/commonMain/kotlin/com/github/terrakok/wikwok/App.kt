@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,6 +33,7 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -71,8 +73,8 @@ internal expect fun clipEntryOf(text: String): ClipEntry
 
 @Composable
 internal fun App(
-    navController: NavHostController = rememberNavController(),
-    shareService: ShareService? = null
+    shareService: ShareService? = null,
+    onNavHostReady: suspend (NavController) -> Unit = {},
 ) = AppTheme {
     val context = LocalPlatformContext.current
     val imageLoader = remember(context) { ImageLoader(context) }
@@ -97,6 +99,7 @@ internal fun App(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) {
+            val navController = rememberNavController()
             NavHost(
                 navController = navController,
                 startDestination = MainDestination,
@@ -104,6 +107,9 @@ internal fun App(
             ) {
                 composable<MainDestination> { WikipediaScreen(navController) }
                 composable<LikedArticlesDestination> { LikedArticlesScreen(navController) }
+            }
+            LaunchedEffect(navController) {
+                onNavHostReady(navController)
             }
 
             val bs = navController.currentBackStack.collectAsStateWithLifecycle()
