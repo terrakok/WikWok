@@ -3,7 +3,7 @@ name: Build desktop apps
 on:
   push:
     tags:
-      - 'v*'
+      - 'desktop-v*'
 
 jobs:
   distributable:

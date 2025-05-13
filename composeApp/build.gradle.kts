@@ -105,8 +105,8 @@ android {
         targetSdk = 35
 
         applicationId = "com.github.terrakok.wikwok.androidApp"
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -134,6 +134,13 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
+    }
+    //https://android.izzysoft.de/articles/named/iod-scan-apkchecks#blobs
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
     }
 }
 
