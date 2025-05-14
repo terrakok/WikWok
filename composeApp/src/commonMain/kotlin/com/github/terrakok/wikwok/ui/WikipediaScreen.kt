@@ -143,6 +143,7 @@ fun WikipediaScreen(
                 // TikTok-like fullscreen pager using VerticalPager
                 VerticalPager(
                     state = pagerState,
+                    beyondViewportPageCount = 1,
                     modifier = Modifier.fillMaxSize()
                 ) { pageIndex ->
                     if (pageIndex < uiState.articles.size) {
