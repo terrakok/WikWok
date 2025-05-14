@@ -32,10 +32,19 @@ If you enjoy WikWok and want to support its development, consider buying me a co
 
 Download WikWok from your preferred app store:
 
-- App Store: IN PROGRESS
 - [Google Play](https://play.google.com/store/apps/details?id=com.github.terrakok.wikwok.androidApp)
 - [Desktop (Macos/Linux/Windows)](https://github.com/terrakok/WikWok/releases)
 - [Web App](https://terrakok.github.io/WikWok/)
+- ~~App Store: IN PROGRESS~~
+  Did you know that Apple is asking for 99 USD **per year** to put the app out to users in AppStore!
+  A year, Carl! A free opensource app!
+  I'm waiting for alternate stores, in the meantime, there's a way to install PWA:
+  - open https://terrakok.github.io/WikWok/ on your iOS device
+  - click on the share button
+  - select "Add to Home screen"
+
+https://github.com/user-attachments/assets/72e03e0b-280c-4247-94d5-6840b3ede31f
+
 
 Or build it yourself from source!
 
