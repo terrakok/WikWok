@@ -65,7 +65,7 @@ fun WikipediaScreen(
     val pagerState = rememberPagerState { uiState.articles.size + 1 }
 
     // Check if we need to load more articles when user scrolls to the end
-    val shouldLoadMore = remember {
+    val shouldLoadMore by remember {
         derivedStateOf {
             // Load more when we're 3 pages away from the end
             pagerState.currentPage >= uiState.articles.size - 3
@@ -73,8 +73,9 @@ fun WikipediaScreen(
     }
 
     // Load more articles when needed
-    LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value && !uiState.isLoading) {
+    val readyToLoadMore = shouldLoadMore && !uiState.isLoading
+    LaunchedEffect(readyToLoadMore) {
+        if (readyToLoadMore) {
             viewModel.loadMoreArticles()
         }
     }
