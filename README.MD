@@ -32,8 +32,9 @@ If you enjoy WikWok and want to support its development, consider buying me a co
 
 Download WikWok from your preferred app store:
 
+- [F-Droid](https://f-droid.org/packages/com.github.terrakok.wikwok.androidApp/)
 - [Google Play](https://play.google.com/store/apps/details?id=com.github.terrakok.wikwok.androidApp)
-- [Desktop (Macos/Linux/Windows)](https://github.com/terrakok/WikWok/releases)
+- [Desktop (Macos/Linux/Windows)](https://github.com/terrakok/WikWok/releases/latest)
 - [Web App](https://terrakok.github.io/WikWok/)
 - ~~App Store: IN PROGRESS~~
   Did you know that Apple is asking for 99 USD **per year** to put the app out to users in AppStore!
