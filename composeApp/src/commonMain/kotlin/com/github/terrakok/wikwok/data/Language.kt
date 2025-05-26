@@ -11,6 +11,8 @@ data class Language(
     val code: String
 )
 
+val EnglishLanguage = Language("English", "en")
+
 /**
  * List of the 50 most popular languages with their locale codes (sorted alphabetically)
  */
@@ -24,7 +26,7 @@ val popularLanguages = listOf(
     Language("Czech", "cs"),
     Language("Danish", "da"),
     Language("Dutch", "nl"),
-    Language("English", "en"),
+    EnglishLanguage,
     Language("Estonian", "et"),
     Language("Filipino", "tl"),
     Language("Finnish", "fi"),

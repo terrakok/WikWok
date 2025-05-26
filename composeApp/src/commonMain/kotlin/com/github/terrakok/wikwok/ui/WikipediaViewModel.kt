@@ -2,6 +2,7 @@ package com.github.terrakok.wikwok.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.terrakok.wikwok.data.EnglishLanguage
 import com.github.terrakok.wikwok.data.Language
 import com.github.terrakok.wikwok.data.LikedArticlesStore
 import com.github.terrakok.wikwok.data.WikipediaArticle
@@ -43,7 +44,7 @@ class WikipediaViewModel(
         get() {
             return settings.getStringOrNull("selected_language")?.let { str ->
                 Json.decodeFromString<Language>(str)
-            } ?: popularLanguages.first()
+            } ?: EnglishLanguage
         }
         set(value) {
             _selectedLanguage.value = value
