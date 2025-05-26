@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -49,6 +50,7 @@ import wikwok.composeapp.generated.resources.Res
 import wikwok.composeapp.generated.resources.error_loading
 import wikwok.composeapp.generated.resources.ic_family_star
 import wikwok.composeapp.generated.resources.ic_favorite_fill
+import wikwok.composeapp.generated.resources.ic_heart_broken
 import wikwok.composeapp.generated.resources.loading
 import wikwok.composeapp.generated.resources.retry
 
@@ -156,6 +158,38 @@ fun WikipediaScreen(
                             isLiked = isLiked,
                             onLikeClick = { viewModel.toggleLike(article) }
                         )
+                    } else if (uiState.error != null) {
+                        // Error UI for pagination failures
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                Icon(
+                                    imageVector = vectorResource(Res.drawable.ic_heart_broken),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(60.dp)
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = stringResource(Res.string.error_loading),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                OutlinedButton(
+                                    onClick = { viewModel.loadMoreArticles() }
+                                ) {
+                                    Text(stringResource(Res.string.retry))
+                                }
+                            }
+                        }
                     } else if (uiState.isLoading) {
                         Box(
                             modifier = Modifier.fillMaxSize(),

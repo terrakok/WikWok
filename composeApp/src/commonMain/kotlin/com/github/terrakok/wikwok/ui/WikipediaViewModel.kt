@@ -73,7 +73,7 @@ class WikipediaViewModel(
     fun loadMoreArticles() {
         if (_uiState.value.isLoading) return
 
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
             try {
