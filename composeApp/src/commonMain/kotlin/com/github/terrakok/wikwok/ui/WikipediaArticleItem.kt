@@ -183,7 +183,8 @@ fun WikipediaArticleItem(
                 overflow = TextOverflow.Ellipsis,
                 style = LocalTextStyle.current.copy(
                     textDirection = if (article.language.isRtl) TextDirection.Rtl else TextDirection.Ltr
-                )
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
 
