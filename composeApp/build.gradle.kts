@@ -14,7 +14,6 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(11)
     androidTarget {
         //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
@@ -105,8 +104,8 @@ android {
         targetSdk = 35
 
         applicationId = "com.github.terrakok.wikwok.androidApp"
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -161,7 +160,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "WikWok"
-            packageVersion = "1.0.2"
+            packageVersion = "1.0.3"
 
             linux {
                 iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
