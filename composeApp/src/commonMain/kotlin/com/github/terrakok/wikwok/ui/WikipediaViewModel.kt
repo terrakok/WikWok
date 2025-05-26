@@ -78,8 +78,8 @@ class WikipediaViewModel(
 
         viewModelScope.launch {
             try {
-                val languageCode = _selectedLanguage.value.code
-                val newArticles = wikipediaService.getRandomArticles(30, languageCode)
+                val language = _selectedLanguage.value
+                val newArticles = wikipediaService.getRandomArticles(30, language)
                 _uiState.update { currentState ->
                     currentState.copy(
                         articles = currentState.articles + newArticles,

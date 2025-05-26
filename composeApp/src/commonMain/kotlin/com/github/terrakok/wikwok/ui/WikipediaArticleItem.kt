@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -143,7 +145,10 @@ fun WikipediaArticleItem(
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    style = LocalTextStyle.current.copy(
+                        textDirection = if (article.language.isRtl) TextDirection.Rtl else TextDirection.Ltr
+                    )
                 )
                 Row {
                     IconButton(onClick = onLikeClick) {
@@ -175,7 +180,10 @@ fun WikipediaArticleItem(
                 color = Color.White.copy(alpha = 0.8f), // Slightly less opaque white
                 fontSize = 14.sp,
                 maxLines = 15,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                style = LocalTextStyle.current.copy(
+                    textDirection = if (article.language.isRtl) TextDirection.Rtl else TextDirection.Ltr
+                )
             )
             Spacer(modifier = Modifier.height(16.dp))
 

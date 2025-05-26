@@ -3,12 +3,13 @@ package com.github.terrakok.wikwok.data
 import kotlinx.serialization.Serializable
 
 /**
- * Data class representing a language with its name and locale code
+ * Data class representing a language with its name, locale code, and RTL flag
  */
 @Serializable
 data class Language(
     val name: String,
-    val code: String
+    val code: String,
+    val isRtl: Boolean = false
 )
 
 val EnglishLanguage = Language("English", "en")
@@ -17,7 +18,7 @@ val EnglishLanguage = Language("English", "en")
  * List of the 50 most popular languages with their locale codes (sorted alphabetically)
  */
 val popularLanguages = listOf(
-    Language("Arabic", "ar"),
+    Language("Arabic", "ar", isRtl = true),
     Language("Bengali", "bn"),
     Language("Bulgarian", "bg"),
     Language("Catalan", "ca"),
@@ -34,7 +35,7 @@ val popularLanguages = listOf(
     Language("German", "de"),
     Language("Greek", "el"),
     Language("Gujarati", "gu"),
-    Language("Hebrew", "he"),
+    Language("Hebrew", "he", isRtl = true),
     Language("Hindi", "hi"),
     Language("Hungarian", "hu"),
     Language("Indonesian", "id"),
@@ -49,7 +50,7 @@ val popularLanguages = listOf(
     Language("Marathi", "mr"),
     Language("Nepali", "ne"),
     Language("Norwegian", "no"),
-    Language("Persian", "fa"),
+    Language("Persian", "fa", isRtl = true),
     Language("Polish", "pl"),
     Language("Portuguese", "pt"),
     Language("Punjabi", "pa"),
@@ -65,6 +66,6 @@ val popularLanguages = listOf(
     Language("Thai", "th"),
     Language("Turkish", "tr"),
     Language("Ukrainian", "uk"),
-    Language("Urdu", "ur"),
+    Language("Urdu", "ur", isRtl = true),
     Language("Vietnamese", "vi")
 )

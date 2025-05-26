@@ -16,7 +16,8 @@ data class WikipediaArticle(
     val title: String,
     val url: String,
     val extract: String,
-    val thumbnail: String?
+    val thumbnail: String?,
+    val language: Language = EnglishLanguage //the default is here to support previously saved articles
 )
 
 /**
@@ -31,9 +32,9 @@ class WikipediaService {
      * @param languageCode Language code for the Wikipedia API (e.g., "en" for English)
      * @return List of Wikipedia articles
      */
-    suspend fun getRandomArticles(count: Int, languageCode: String): List<WikipediaArticle> {
+    suspend fun getRandomArticles(count: Int, language: Language): List<WikipediaArticle> {
         try {
-            val responseText = client.get("https://${languageCode}.wikipedia.org/w/api.php?" +
+            val responseText = client.get("https://${language.code}.wikipedia.org/w/api.php?" +
                     "action=query" +
                     "&format=json" +
                     "&generator=random" +
@@ -48,7 +49,7 @@ class WikipediaService {
                     "&piprop=thumbnail" +
                     "&pithumbsize=800" +
                     "&origin=*" +
-                    "&variant=${languageCode}"
+                    "&variant=${language.code}"
             ).body<String>()
             val jsonElement = Json.parseToJsonElement(responseText)
 
@@ -73,7 +74,8 @@ class WikipediaService {
                         title = title,
                         url = url,
                         extract = extract,
-                        thumbnail = thumbnail
+                        thumbnail = thumbnail,
+                        language = language
                     )
                 )
             }
